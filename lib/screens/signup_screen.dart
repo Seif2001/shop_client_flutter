@@ -14,13 +14,13 @@ class SignupScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextField(
+                const TextField(
                   decoration: InputDecoration(
-                    labelText: 'Nammme',
+                    labelText: 'Name',
                   ),
                 ),
                 SizedBox(height: 16.0),
-                TextField(
+                const TextField(
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
                   ),
