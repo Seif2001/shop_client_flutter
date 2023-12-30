@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shop_app/screens/signup_screen.dart';
-import 'package:shop_app/screens/signup_two.dart';
+import 'package:shop_app/Models/user.dart';
+import 'package:shop_app/screens/Signup/signup_name.dart';
+class SignupFirst extends StatefulWidget {
+  final User user;
 
-class SignupFirst extends StatelessWidget {
+  SignupFirst({required this.user});
+
+  @override
+  _SignupFirst createState() => _SignupFirst();
+}
+
+
+class _SignupFirst extends State<SignupFirst> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +28,9 @@ class SignupFirst extends StatelessWidget {
               height: 150,
               child: ElevatedButton(
                 onPressed: () {
+                  widget.user.isStore = false;
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupScreen()));
+                      MaterialPageRoute(builder: (context) => SignUpName(user: widget.user)));
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -32,7 +41,7 @@ class SignupFirst extends StatelessWidget {
                     ),
                     SizedBox(height: 8),
                     Text("Customer",
-                        style: GoogleFonts.poppins(
+                        style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Colors.white)),
@@ -47,15 +56,16 @@ class SignupFirst extends StatelessWidget {
                 height: 150,
                 child: ElevatedButton(
                   onPressed: () {
+                    widget.user.isStore = true;
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SignUpStore()));
+                        MaterialPageRoute(builder: (context) => SignUpName(user: widget.user,)));
                   },
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.store, size: 50),
                         Text("Store",
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white))

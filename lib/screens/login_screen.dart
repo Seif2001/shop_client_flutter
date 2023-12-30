@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             TextField(
               decoration: InputDecoration(
-                hintText: 'Email',
+                hintText: 'Number',
                 filled: true,
                 fillColor: Colors.white,
               ),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shop_app/screens/signup_one.dart';
+import 'package:shop_app/Models/user.dart';
+import 'package:shop_app/screens/Signup/signup_one.dart';
 
 import 'login_screen.dart';
 
 class FirstScreen extends StatelessWidget {
+  User user = User.empty();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +20,7 @@ class FirstScreen extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
                 child: Text("Login",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Colors.white)),
@@ -30,10 +31,10 @@ class FirstScreen extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SignupFirst()));
+                      MaterialPageRoute(builder: (context) => SignupFirst(user: user,)));
                 },
                 child: Text("Sign Up",
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
                         color: Colors.black)),
