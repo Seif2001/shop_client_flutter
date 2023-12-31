@@ -11,7 +11,6 @@ class SignUpAddress extends StatefulWidget {
   _SignUpAddress createState() => _SignUpAddress();
 }
 
-
 class _SignUpAddress extends State<SignUpAddress> {
   TextEditingController addressController = TextEditingController();
   @override
@@ -25,13 +24,13 @@ class _SignUpAddress extends State<SignUpAddress> {
           alignment: Alignment.center,
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Icon(
-              Icons.mail_outline,
+              Icons.map_outlined,
               size: 100,
               color: Colors.blue,
             ),
             TextField(
               decoration: InputDecoration(
-                hintText: 'Enter your Email',
+                hintText: 'Enter your Address',
                 filled: true,
                 fillColor: Colors.white,
               ),
@@ -42,12 +41,13 @@ class _SignUpAddress extends State<SignUpAddress> {
             ElevatedButton(
                 onPressed: () {
                   setState(() {
-                  widget.user.address = addressController.text;
-                });
+                    widget.user.address = addressController.text;
+                  });
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SignUpPassword(user:widget.user)));
+                          builder: (context) =>
+                              SignUpPassword(user: widget.user)));
                 },
                 child: Text("Next",
                     style: TextStyle(

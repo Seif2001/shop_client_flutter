@@ -47,7 +47,7 @@ class _SignUpPassword extends State<SignUpPassword> {
               controller: confirmPasswordController,
             ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (passwordController.text !=
                       confirmPasswordController.text) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -68,7 +68,8 @@ class _SignUpPassword extends State<SignUpPassword> {
                   } else {
                     widget.user.password = passwordController.text;
                   }
-                  if (UserService.registerUser(widget.user) == false) {
+                  bool registered = await UserService.registerUser(widget.user);
+                  if (registered == false) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('User already exists'),
@@ -83,11 +84,12 @@ class _SignUpPassword extends State<SignUpPassword> {
                         backgroundColor: Colors.green,
                       ),
                     );
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductListWidget()));
                   }
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProductListWidget()));
                 },
                 child: Text("Sign Up",
                     style: TextStyle(

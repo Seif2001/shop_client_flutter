@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shop_app/Models/product.dart';
 import 'package:shop_app/helpers/sortby_enum.dart';
 import 'package:shop_app/screens/Products/product_filter_screen.dart';
+import 'package:shop_app/services/users.dart';
+import '../../Models/user.dart';
 import '../../services/products.dart';
 
 class ProductListWidget extends StatefulWidget {
@@ -16,6 +18,14 @@ class _ProductListWidget extends State<ProductListWidget> {
   String selectedStore = 'All';
   SortBy selectedSort = SortBy.Alphabetical;
   List<Product> filteredAndSortedProducts = [];
+  late Future<User> userFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    userFuture = UserService.fetchUser();
+    _fetchProducts();
+  }
 
   Future<void> _fetchProducts() async {
     try {
@@ -34,27 +44,32 @@ class _ProductListWidget extends State<ProductListWidget> {
   }
 
   void _showFilterScreen(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return ProductFilterScreen(
-          selectedStore: selectedStore,
-          selectedSort: selectedSort,
-          onStoreChanged: (value) {
-            setState(() {
-              selectedStore = value!;
-              _fetchProducts();
-            });
-          },
-          onSortChanged: (value) {
-            setState(() {
-              selectedSort = value!;
-              _fetchProducts();
-            });
-          },
-        );
-      },
-    );
+    userFuture.then((user) {
+      if (user.isStore == true) {
+        return;
+      }
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ProductFilterScreen(
+            selectedStore: selectedStore,
+            selectedSort: selectedSort,
+            onStoreChanged: (value) {
+              setState(() {
+                selectedStore = value!;
+                _fetchProducts();
+              });
+            },
+            onSortChanged: (value) {
+              setState(() {
+                selectedSort = value!;
+                _fetchProducts();
+              });
+            },
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -63,9 +78,21 @@ class _ProductListWidget extends State<ProductListWidget> {
       appBar: AppBar(
         title: Text('Product List'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: () => _showFilterScreen(context),
+          FutureBuilder<User>(
+            future: userFuture,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && !snapshot.data!.isStore) {
+                return IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: () {
+                    _showFilterScreen(context);
+                  },
+                );
+              } else if (snapshot.hasData && snapshot.data!.isStore) {
+                return Container(); // or null, or any other widget
+              }
+              return Container(); // or null, or any other widget
+            },
           ),
         ],
       ),

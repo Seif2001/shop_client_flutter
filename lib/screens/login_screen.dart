@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/Products/products_list.dart';
+import 'package:shop_app/services/users.dart';
 
 class LoginScreen extends StatelessWidget {
+  TextEditingController numberController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +23,8 @@ class LoginScreen extends StatelessWidget {
                 filled: true,
                 fillColor: Colors.white,
               ),
+              keyboardType: TextInputType.number,
+              controller: numberController,
             ),
             SizedBox(height: 16),
             TextField(
@@ -28,11 +34,21 @@ class LoginScreen extends StatelessWidget {
                 fillColor: Colors.white,
               ),
               obscureText: true,
+              controller: passwordController,
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                // TODO: Implement login functionality
+              onPressed: () async {
+                await UserService.loginUser(
+                  numberController.text,
+                  passwordController.text,
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductListWidget(),
+                  ),
+                );
               },
               child: Text('Login'),
             ),
