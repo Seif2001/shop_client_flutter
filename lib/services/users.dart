@@ -63,6 +63,7 @@ class UserService {
       }),
     );
     if (response.statusCode >= 200) {
+      print("login  ${response.body}");
       final String user = jsonDecode(response.body);
       await TokenPreferences.saveAuthToken(user);
       return user;
@@ -76,15 +77,14 @@ class UserService {
 
     try {
       String? token = await TokenPreferences.getAuthToken();
-      print(token);
 
       if (token != null) {
         final response = await http.get(uri, headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer "$token"',
         });
 
-        print(response.body);
+        print("response: " + response.body);
 
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = jsonDecode(response.body);

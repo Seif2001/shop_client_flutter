@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:shop_app/Models/product.dart';
 import 'package:shop_app/helpers/sortby_enum.dart';
+import 'package:shop_app/screens/Products/create_product_screen.dart';
 import 'package:shop_app/screens/Products/product_filter_screen.dart';
+import 'package:shop_app/services/stores.dart';
 import 'package:shop_app/services/users.dart';
 import '../../Models/user.dart';
 import '../../services/products.dart';
@@ -29,13 +31,24 @@ class _ProductListWidget extends State<ProductListWidget> {
 
   Future<void> _fetchProducts() async {
     try {
-      final List<Product> products = await ProductService.fetchProducts(
-        store: selectedStore,
-        sortBy: selectedSort,
-      );
-      log('Products: $products');
-      setState(() {
-        filteredAndSortedProducts = products;
+      userFuture.then((user) async {
+        if (user.isStore == true) {
+          final List<Product> products =
+              await StoreService.fetchStoreProducts(user.id);
+          print(user.id);
+          setState(() {
+            filteredAndSortedProducts = products;
+          });
+        } else {
+          final List<Product> products = await ProductService.fetchProducts(
+            store: selectedStore,
+            sortBy: selectedSort,
+          );
+          log('Products: $products');
+          setState(() {
+            filteredAndSortedProducts = products;
+          });
+        }
       });
     } catch (e) {
       // Handle errors
@@ -89,7 +102,18 @@ class _ProductListWidget extends State<ProductListWidget> {
                   },
                 );
               } else if (snapshot.hasData && snapshot.data!.isStore) {
-                return Container(); // or null, or any other widget
+                return IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateProductScreen(),
+                      ),
+                    );
+                  },
+                );
+                ; // or null, or any other widget
               }
               return Container(); // or null, or any other widget
             },
