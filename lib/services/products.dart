@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shop_app/Models/product.dart';
 import 'package:shop_app/helpers/sortby_enum.dart';
+import 'package:shop_app/prefrences/auth_pref.dart';
 
 class ProductService {
   static const String baseUrl = 'http://192.168.100.8:3000/customer/products';
@@ -32,9 +33,14 @@ class ProductService {
 
     final Uri requestUri = uri.replace(queryParameters: queryParams);
     print('Request URI: $requestUri');
+    String? token = await TokenPreferences.getAuthToken();
+
     final response = await http.get(
       requestUri,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token"
+      },
     );
 
     if (response.statusCode == 200) {

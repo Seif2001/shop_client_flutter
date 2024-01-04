@@ -108,7 +108,8 @@ class _ProductListWidget extends State<ProductListWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreateProductScreen(),
+                        builder: (context) =>
+                            CreateProductScreen(snapshot.data!.id),
                       ),
                     );
                   },
@@ -120,33 +121,38 @@ class _ProductListWidget extends State<ProductListWidget> {
           ),
         ],
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Set the number of columns in the grid
-          crossAxisSpacing: 8.0, // Set the horizontal spacing between columns
-          mainAxisSpacing: 8.0, // Set the vertical spacing between rows
-        ),
-        itemCount: filteredAndSortedProducts.length,
-        itemBuilder: (context, index) {
-          return Card(
-            margin: EdgeInsets.all(10),
-            child: Column(children: [
-              Image.asset(
-                filteredAndSortedProducts[index].image,
-                width: 100, // Set the desired width
-                height: 100, // Set the desired height
-                fit: BoxFit.cover, // Adjust the BoxFit property as needed
-              ),
-              SizedBox(height: 8),
-              Text(
-                filteredAndSortedProducts[index].name,
-              ),
-              Text(
-                  '\$${filteredAndSortedProducts[index].price.toStringAsFixed(2)}'),
-            ]),
-          );
-        },
-      ),
+      body: RefreshIndicator(
+          onRefresh: () async => {
+                await _fetchProducts(),
+              },
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // Set the number of columns in the grid
+              crossAxisSpacing:
+                  8.0, // Set the horizontal spacing between columns
+              mainAxisSpacing: 8.0, // Set the vertical spacing between rows
+            ),
+            itemCount: filteredAndSortedProducts.length,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: EdgeInsets.all(10),
+                child: Column(children: [
+                  Image.asset(
+                    filteredAndSortedProducts[index].image,
+                    width: 100, // Set the desired width
+                    height: 100, // Set the desired height
+                    fit: BoxFit.cover, // Adjust the BoxFit property as needed
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    filteredAndSortedProducts[index].name,
+                  ),
+                  Text(
+                      '\$${filteredAndSortedProducts[index].price.toStringAsFixed(2)}'),
+                ]),
+              );
+            },
+          )),
     );
   }
 }

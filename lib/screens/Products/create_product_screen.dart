@@ -7,7 +7,7 @@ import 'package:shop_app/services/stores.dart';
 
 class CreateProductScreen extends StatefulWidget {
   final String? storeId;
-  CreateProductScreen({this.storeId});
+  CreateProductScreen(this.storeId);
   @override
   _CreateProductScreenState createState() => _CreateProductScreenState();
 }
@@ -72,18 +72,13 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                 final productName = _nameController.text;
                 final productPrice = _priceController.text;
                 final storeId = widget.storeId;
-
-                if (productName.isNotEmpty &&
-                    productPrice.isNotEmpty &&
-                    storeId != null &&
-                    _image != null) {
-                  // Use the addProduct function to create the product
+                if (productName.isNotEmpty && productPrice.isNotEmpty) {
                   try {
                     final bool success = await StoreService.addProduct(
                       productName,
                       productPrice,
                       _image!,
-                      storeId,
+                      storeId!,
                     );
 
                     if (success) {
@@ -124,10 +119,4 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: CreateProductScreen(),
-  ));
 }

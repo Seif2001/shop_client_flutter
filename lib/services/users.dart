@@ -64,7 +64,7 @@ class UserService {
     );
     if (response.statusCode >= 200) {
       print("login  ${response.body}");
-      final String user = jsonDecode(response.body);
+      final String user = response.body;
       await TokenPreferences.saveAuthToken(user);
       return user;
     } else {
